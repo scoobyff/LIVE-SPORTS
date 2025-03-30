@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Match Streaming</title>
+    <link href="https://cdn.jsdelivr.net/npm/video.js/dist/video-js.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/video.js/dist/video.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; }
+        #video-container { max-width: 800px; margin: auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); }
+        input, button { margin: 10px; padding: 10px; font-size: 16px; }
+        button { cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px; }
+        button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>Live Match Streaming</h1>
+    <input type="text" id="m3u8-url" placeholder="Enter M3U8 Link">
+    <button onclick="loadStream()">Play</button>
+    <div id="video-container">
+        <video id="video-player" class="video-js vjs-default-skin" controls width="800" height="450"></video>
+    </div>
+
+    <script>
+        function loadStream() {
+            const url = document.getElementById('m3u8-url').value;
+            if (!url) {
+                alert('Please enter an M3U8 link');
+                return;
+            }
+            const video = document.getElementById('video-player');
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(url);
+                hls.attachMedia(video);
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = url;
+            } else {
+                alert('Your browser does not support HLS streaming');
+            }
+            video.play();
+        }
+    </script>
+</body>
+</html>
